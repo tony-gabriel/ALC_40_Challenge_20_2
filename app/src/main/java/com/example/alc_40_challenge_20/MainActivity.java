@@ -1,14 +1,14 @@
 package com.example.alc_40_challenge_20;
 
-import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextInputEditText email, name, password;
+    EditText email, name, password;
     Button save;
 
     @Override
