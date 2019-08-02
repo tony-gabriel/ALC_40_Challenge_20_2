@@ -4,4 +4,5 @@
     <string name="first_last_name"><![CDATA[First & last name]]></string>
     <string name="password">Password</string>
     <string name="save_btn">Save</string>
+    <string name="welcome_signup">Welcome</string>
 </resources>
