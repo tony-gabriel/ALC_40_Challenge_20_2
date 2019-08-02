@@ -5,4 +5,8 @@
     <string name="password">Password</string>
     <string name="save_btn">Save</string>
     <string name="welcome_signup">Welcome</string>
+    <string name="title_activity_insert">InsertActivity</string>
+    <string name="name_hint">Input name</string>
+    <string name="price_hint">Price numbers only</string>
+    <string name="hint_decsription">Decsription</string>
 </resources>
