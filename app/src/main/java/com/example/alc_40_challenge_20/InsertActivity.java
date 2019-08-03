@@ -29,8 +29,10 @@ public class InsertActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         setTitle("New Deal");
 
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabaseReference = mFirebaseDatabase.getReference().child("traveldeals");
+        FirebaseUtil.openFbReference("traveldeals");
+        mFirebaseDatabase = FirebaseUtil.mFirebaseDatabase;
+        mDatabaseReference = FirebaseUtil.mDatabaseReference;
+
         txt_title = findViewById(R.id.txt_title);
         txt_price = findViewById(R.id.txt_price);
         txt_description = findViewById(R.id.txt_description);
