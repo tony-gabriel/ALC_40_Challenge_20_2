@@ -27,6 +27,7 @@ public class InsertActivity extends AppCompatActivity {
         setContentView(R.layout.activity_insert);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        setTitle("New Deal");
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference().child("traveldeals");

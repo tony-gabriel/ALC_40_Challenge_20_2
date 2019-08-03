@@ -1,6 +1,8 @@
 package com.example.alc_40_challenge_20;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -28,13 +30,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        setTitle("Sign up");
     }
 
     private void register(){
 
-
+        Intent intent = new Intent(this, InsertActivity.class);
+        startActivity(intent);
 
     }
 
