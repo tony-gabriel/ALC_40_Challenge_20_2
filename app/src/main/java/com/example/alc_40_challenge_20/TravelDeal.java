@@ -1,6 +1,8 @@
 package com.example.alc_40_challenge_20;
 
-public class TravelDeal {
+import java.io.Serializable;
+
+public class TravelDeal implements Serializable {
 
     private String id;
     private String title;

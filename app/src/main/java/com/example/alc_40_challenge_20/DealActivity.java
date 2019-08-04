@@ -14,13 +14,14 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class InsertActivity extends AppCompatActivity {
+public class DealActivity extends AppCompatActivity {
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
     EditText txt_title;
     EditText txt_price;
     EditText txt_description;
+    TravelDeal deal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,17 @@ public class InsertActivity extends AppCompatActivity {
         txt_title = findViewById(R.id.txt_title);
         txt_price = findViewById(R.id.txt_price);
         txt_description = findViewById(R.id.txt_description);
+
+        Intent intent = getIntent();
+        TravelDeal deal = (TravelDeal) intent.getSerializableExtra("Deal");
+        if(deal==null) {
+
+            deal = new TravelDeal();
+        }
+        this.deal = deal;
+        txt_title.setText(deal.getTitle());
+        txt_description.setText(deal.getDescription());
+        txt_price.setText(deal.getPrice());
 
     }
 

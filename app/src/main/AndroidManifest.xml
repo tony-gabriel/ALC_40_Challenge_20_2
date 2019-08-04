@@ -16,7 +16,7 @@
         tools:replace="android:appComponentFactory">
         <activity android:name=".ListActivity"></activity>
         <activity
-            android:name=".InsertActivity"
+            android:name=".DealActivity"
             android:label="@string/title_activity_insert"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
