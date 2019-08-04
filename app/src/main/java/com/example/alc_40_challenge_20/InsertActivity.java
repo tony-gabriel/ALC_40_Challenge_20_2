@@ -1,5 +1,6 @@
 package com.example.alc_40_challenge_20;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -67,11 +68,14 @@ public class InsertActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+        Intent intent = new Intent(this, ListActivity.class);
+
         switch (item.getItemId()) {
             case R.id.save_menu:
                    saveDeal();
                 Toast.makeText(this, "Deal saved", Toast.LENGTH_LONG).show();
                   clean();
+                  startActivity(intent);
                 return true;
                 default:
                     return super.onOptionsItemSelected(item);
