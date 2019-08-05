@@ -62,11 +62,15 @@ public class DealActivity extends AppCompatActivity {
 
     private void saveDeal(){
 
-        String title = txt_title.getText().toString();
-        String description = txt_description.getText().toString();
-        String price = txt_price.getText().toString();
-        TravelDeal deals = new TravelDeal(title, description, price, "");
-        mDatabaseReference.push().setValue(deals);
+        deal.setTitle( txt_title.getText().toString());
+        deal.setDescription( txt_description.getText().toString());
+        deal.setPrice(txt_price.getText().toString());
+       if (deal.getId()==null) {
+           mDatabaseReference.push().setValue(deal);
+       }
+       else {
+           mDatabaseReference.child(deal.getId()).setValue(deal);
+       }
     }
 
     private void clean(){
@@ -77,17 +81,36 @@ public class DealActivity extends AppCompatActivity {
         txt_title.requestFocus();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    private void deleteDeal(){
+
+        if (deal==null){
+            Toast.makeText(this, "Please save the deal before deleting", Toast.LENGTH_LONG).show();
+            return;
+        }
+        mDatabaseReference.child(deal.getId()).removeValue();
+    }
+
+    private void backToList(){
 
         Intent intent = new Intent(this, ListActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
             case R.id.save_menu:
                    saveDeal();
                 Toast.makeText(this, "Deal saved", Toast.LENGTH_LONG).show();
                   clean();
-                  startActivity(intent);
+                  backToList();
+                return true;
+
+            case R.id.delete_menu:
+                deleteDeal();
+                Toast.makeText(this, "Deal deleted", Toast.LENGTH_LONG).show();
+                backToList();
                 return true;
                 default:
                     return super.onOptionsItemSelected(item);
