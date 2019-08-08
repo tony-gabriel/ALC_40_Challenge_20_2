@@ -17,64 +17,64 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class MainActivity extends AppCompatActivity {
+public class SignInActivity extends AppCompatActivity {
 
-    EditText email, name, password;
-    Button save;
+    EditText email, password;
+    Button signIn;
     private FirebaseAuth mAuth;
+    private String TAG = "signInWithEmail";
 
-    private String TAG = "createUserWithEmail";
+    public void goToSignUp(View view){
+        startActivity(new Intent(this, MainActivity.class));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_sign_in);
 
-         email = findViewById(R.id.email);
-         name = findViewById(R.id.name);
-         password = findViewById(R.id.password);
-         save = findViewById(R.id.btn_save);
 
-        // Initialize Firebase Auth
+        email = findViewById(R.id.email);
+        password = findViewById(R.id.password);
+        signIn = findViewById(R.id.btn_sign_in);
+
         mAuth = FirebaseAuth.getInstance();
-
-        save.setOnClickListener(new View.OnClickListener() {
+        signIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                register();
+                signUp();
             }
         });
 
     }
 
-    public void goToSignIn(View view){
-        startActivity(new Intent(MainActivity.this, SignInActivity.class));
-    }
+    private void signUp(){
 
-    private void register(){
-
-        mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString())
+        mAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                             FirebaseUser user = mAuth.getCurrentUser();
-                            startActivity(new Intent(MainActivity.this, ListActivity.class));
-
+                            //  Log.d(TAG, "signInWithEmail:success");
+                            startActivity(new Intent(SignInActivity.this, ListActivity.class));
+                            // FirebaseUser user = mAuth.getCurrentUser();
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                            Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            Toast.makeText(SignInActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-
                         }
+
+                        // ...
                     }
                 });
 
     }
 
-
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        finish();
+//    }
 }
-
-
