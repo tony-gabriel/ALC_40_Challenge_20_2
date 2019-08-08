@@ -89,24 +89,22 @@ public class DealActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == PICTURE_RESULT && requestCode == RESULT_OK){
+
              final Uri ImageUri = data.getData();
-            final StorageReference ref = FirebaseUtil.mStorageRef.child(ImageUri.getLastPathSegment());
-            ref.putFile(ImageUri).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            final StorageReference ref = FirebaseUtil.mStorage.getReference().child("deals_pictures").child(ImageUri.getLastPathSegment());
+            ref.putFile(ImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
-                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                    if (!task.isSuccessful()){
-                        throw task.getException();
-                    }
-                    return ref.getDownloadUrl();
-                }
-            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                @Override
-                public void onComplete(@NonNull Task<Uri> task) {
-                    if (task.isSuccessful()){
-                        String pictureName = ImageUri.toString();
-                        deal.setImageUrl(task.getResult().toString());
-                        deal.setImageName(task.getResult().toString());
-                    }
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            url = uri.toString();
+                            deal.setImageUrl(url);
+                            showImage(deal.getImageUrl());
+                            //Handle whatever you're going to do with the URL here
+                        }
+                    });
+                    deal.setImageName(taskSnapshot.getStorage().getPath());
                 }
             });
 
