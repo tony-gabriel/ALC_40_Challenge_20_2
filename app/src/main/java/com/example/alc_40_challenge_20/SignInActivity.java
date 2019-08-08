@@ -72,9 +72,4 @@ public class SignInActivity extends AppCompatActivity {
 
     }
 
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        finish();
-//    }
 }

@@ -25,17 +25,24 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+
 public class DealActivity extends AppCompatActivity {
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
     private static final int PICTURE_RESULT = 42;
+    private FirebaseAuth mAuth;
     EditText txt_title;
     EditText txt_price;
     EditText txt_description;
@@ -54,6 +61,7 @@ public class DealActivity extends AppCompatActivity {
         FirebaseUtil.openFbReference("traveldeals", this);
         mFirebaseDatabase = FirebaseUtil.mFirebaseDatabase;
         mDatabaseReference = FirebaseUtil.mDatabaseReference;
+        mAuth = FirebaseAuth.getInstance();
 
         txt_title = findViewById(R.id.txt_title);
         txt_price = findViewById(R.id.txt_price);
@@ -88,28 +96,36 @@ public class DealActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICTURE_RESULT && requestCode == RESULT_OK){
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat format = new SimpleDateFormat("HHss");
+        String time = format.format(calendar.getTime());
 
-             final Uri ImageUri = data.getData();
-            final StorageReference ref = FirebaseUtil.mStorage.getReference().child("deals_pictures").child(ImageUri.getLastPathSegment());
-            ref.putFile(ImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            url = uri.toString();
-                            deal.setImageUrl(url);
-                            showImage(deal.getImageUrl());
-                            //Handle whatever you're going to do with the URL here
-                        }
-                    });
-                    deal.setImageName(taskSnapshot.getStorage().getPath());
-                }
-            });
+        final Uri ImageUri = data.getData();
+        final StorageReference ref = FirebaseUtil.mStorage.getReference().child("deals_pictures" + time );
+
+        ref.putFile(ImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        deal.setImageUrl(uri.toString());
+                        showImage(deal.getImageUrl());
+                        mDatabaseReference.child(deal.getId()).setValue(deal.getImageUrl());
+//                        Map<String, Object> taskMap = new HashMap<>();
+//                        taskMap.put("imageUrl", deal.getImageUrl());
+//                        mDatabaseReference.child(deal.getId()).updateChildren(taskMap);
+
+                        //Handle whatever you're going to do with the URL here
+                    }
+                });
+
+                deal.setImageName(taskSnapshot.getStorage().getPath());
+            }
+        });
 
 
-        }
     }
 
     @Override
@@ -150,6 +166,7 @@ public class DealActivity extends AppCompatActivity {
         deal.setDescription( txt_description.getText().toString());
         deal.setPrice(txt_price.getText().toString());
         deal.setImageUrl(url);
+        //   deal.setImageUrl(url);
        if (deal.getId()==null) {
            mDatabaseReference.push().setValue(deal);
        }
