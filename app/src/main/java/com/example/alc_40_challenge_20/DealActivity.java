@@ -107,17 +107,12 @@ public class DealActivity extends AppCompatActivity {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        deal.setImageUrl(uri.toString());
+                       deal.setImageUrl(String.valueOf(uri));
+                       url = uri.toString();
                         showImage(deal.getImageUrl());
-                        mDatabaseReference.child(deal.getId()).setValue(deal.getImageUrl());
-//                        Map<String, Object> taskMap = new HashMap<>();
-//                        taskMap.put("imageUrl", deal.getImageUrl());
-//                        mDatabaseReference.child(deal.getId()).updateChildren(taskMap);
-
-                        //Handle whatever you're going to do with the URL here
                     }
                 });
 
